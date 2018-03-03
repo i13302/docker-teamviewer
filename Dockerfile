@@ -17,7 +17,8 @@ RUN dpkg --add-architecture i386 && \
         libdbus-1-3:i386 libasound2:i386 libexpat1:i386 libfontconfig1:i386 \
         libfreetype6:i386 libjpeg62:i386 libpng12-0:i386 libsm6:i386 \
         libxdamage1:i386 libxext6:i386 libxfixes3:i386 libxinerama1:i386 \
-        libxrandr2:i386 libxrender1:i386 libxtst6:i386 zlib1g:i386 && \
+        libxrandr2:i386 libxrender1:i386 libxtst6:i386 zlib1g:i386 \
+	vnc4server &&\
     wget --no-check-certificate -q -O /tmp/teamviewer_i386.tar.xz "http://download.teamviewer.com/download/teamviewer_i386.tar.xz" && \
     tar xf /tmp/teamviewer_i386.tar.xz -C /opt/ && \
     rm /tmp/teamviewer_i386.tar.xz && \
@@ -25,6 +26,16 @@ RUN dpkg --add-architecture i386 && \
     apt-get clean --yes && \
     rm -rf /var/lib/apt/lists/*
 
+RUN adduser --disabled-password --gecos '' student
+RUN echo "student:miyalab" | chpasswd
+
+USER student
+WORKDIR /home/student
+
+RUN mkdir /home/student/.vnc && echo "exec /usr/bin/gnome-session-classic &" >> /home/student/.vnc/xstartup
+
 VOLUME ["/tmp/.X11-unix"]
 
-CMD /opt/teamviewer/teamviewer
+
+#CMD vncserver:1 && vncserver -kill :1 && /opt/teamviewer/teamviewer && vncserver  :1 -geometry 800x600 -depth 24
+#CMD  /opt/teamviewer/teamviewer
