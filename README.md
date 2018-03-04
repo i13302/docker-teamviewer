@@ -23,3 +23,16 @@ $ docker run -d -it --rm -v /tmp/.X11-unix:/tmp/.X11-unix --name teamviewer amco
 ```sh
 $ docker build -t amcorreia/docker-teamviewer .
 ```
+docker build -t teamviewer . 
+
+docker run -itd -p 59010:5901 -e USER=root --name teamviewer teamviewer 
+
+docker exec -it teamviewer /bin/bash
+
+
+CMDでvncserver :1 にしたら，Xがmateで立ち上がらない．
+(多分configファイルで変更出来る)
+
+しかし，それ以前にteamviewer自体がX上で起動しないといけない．これができないわけでもないけど，しんどい．
+
+
